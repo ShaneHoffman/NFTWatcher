@@ -1,0 +1,48 @@
+﻿@page "/search/{searchText}"
+@inject ISearchService SearchService
+
+@if (collections is not null)
+{
+    <MudContainer Class="pt-8">
+        @foreach (var collection in collections)
+        {
+            <MudCard Class="pa-2 ma-4">
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+                        <MudAvatar Image="@collection.imageUrl" />
+                    </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.body1">@collection.Name</MudText>
+                        <MudText Typo="Typo.body2">@collection.floorPrice ETH</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Success" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+            </MudCard>
+        }
+    </MudContainer>
+}
+else
+{
+    <MudText>Loading</MudText>
+}
+
+
+@code {
+    private List<CollectionFromSearch> collections = null;
+
+    [Parameter]
+    public string searchText { get; set; } = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrEmpty(searchText)) 
+            return;
+
+        var result = await SearchService.SearchCollections(searchText);
+
+        if (result is not null && result.Success)
+            collections = result.Data;
+    }
+}

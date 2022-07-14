@@ -14,18 +14,11 @@ namespace NFTWatcherV1.Server.Services.SearchService
         {
             var response = new ServiceResponse<List<CollectionFromSearch>>();
 
-            if (string.IsNullOrEmpty(searchText))
-            {
-                response.Success = false;
-                response.Message = "Search text is null or empty.";
-                return response;
-            }
-
             var request = new HttpRequestMessage(new HttpMethod("POST"), "https://genie-production-api.herokuapp.com/searchCollections");
             request.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
 
             request.Content = new StringContent("{\"filters\":{\"$or\":[{\"name\":{\"$regex\":\"" + 
-                searchText + "\",\"$options\":\"i\"}}]},\"limit\":5,\"fields\":{\"name\":1,\"" + 
+                searchText + "\",\"$options\":\"i\"}}]},\"limit\":8,\"fields\":{\"name\":1,\"" + 
                 "imageUrl\":1,\"address\":1,\"floorPrice\":1},\"offset\":0}");
             request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             
