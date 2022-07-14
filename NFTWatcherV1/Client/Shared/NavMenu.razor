@@ -1,9 +1,8 @@
-﻿<MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/servers" Match="NavLinkMatch.Prefix">Servers</MudNavLink>
-    <MudNavGroup Title="Settings" Expanded="true">
-        <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">Users</MudNavLink>
-        <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Security</MudNavLink>
-    </MudNavGroup>
-    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
-</MudNavMenu>
+﻿<MudPaper Class="d-inline-flex py-3">
+    <MudNavMenu Class="mud-width-full" Color="Color.Info" Rounded="true">
+        <MudText Class="px-4" Typo="Typo.h5">NFT Watcher</MudText>
+        <MudDivider Class="my-2" />
+        <MudNavLink Href="/" Icon="@Icons.Filled.Home" Match="NavLinkMatch.All">Home</MudNavLink>
+        <MudNavLink Href="/watching" Icon="@Icons.Filled.ChecklistRtl" Match="NavLinkMatch.All">Watching</MudNavLink>
+    </MudNavMenu>
+</MudPaper>
