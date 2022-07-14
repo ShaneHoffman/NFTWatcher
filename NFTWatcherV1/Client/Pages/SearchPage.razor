@@ -1,7 +1,7 @@
 ﻿@page "/search/{searchText}"
 @inject ISearchService SearchService
 
-@if (collections is not null)
+@if (collections is not null && collections.Count > 0)
 {
     <MudContainer Class="pt-8">
         @foreach (var collection in collections)
@@ -30,7 +30,7 @@ else
 
 
 @code {
-    private List<CollectionFromSearch> collections = null;
+    private List<CollectionFromSearch> collections = new List<CollectionFromSearch>();
 
     [Parameter]
     public string searchText { get; set; } = string.Empty;
@@ -43,6 +43,6 @@ else
         var result = await SearchService.SearchCollections(searchText);
 
         if (result is not null && result.Success)
-            collections = result.Data;
+            collections = result.Data!;
     }
 }

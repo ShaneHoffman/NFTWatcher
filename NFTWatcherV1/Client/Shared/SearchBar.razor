@@ -1,0 +1,30 @@
+﻿@inject NavigationManager NavigationManager
+
+<MudTextField
+    Class="pb-4 px-4"
+    Immediate="true"
+    @bind-Value="SearchText"
+    Label="@(GlobalSearch ? "Global Search" : "Local Search")"
+    Variant="Variant.Text" 
+    Adornment="Adornment.End" 
+    AdornmentIcon="@Icons.Filled.Search"
+    OnAdornmentClick="Search" 
+    OnKeyDown="KeyCheck" ></MudTextField>
+<MudSwitch 
+    @bind-Checked="GlobalSearch" ></MudSwitch>
+
+@code {
+    public string SearchText { get; set; } = string.Empty;
+    public bool GlobalSearch { get; set; } = true;
+
+    public void Search()
+    {
+        NavigationManager.NavigateTo($"search/{SearchText}");
+    }
+
+    public void KeyCheck(KeyboardEventArgs ke)
+    {
+        if (ke.Code.Equals("Enter"))
+            Search();
+    }
+}
