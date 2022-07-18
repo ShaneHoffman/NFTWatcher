@@ -1,0 +1,10 @@
+﻿@page "/collection/{collectionAddress}"
+
+<h3>@collectionAddress</h3>
+
+@code {
+    [Parameter]
+    public string collectionAddress { get; set; } = string.Empty;
+
+}
+
