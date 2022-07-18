@@ -20,5 +20,19 @@ namespace NFTWatcherV1.Server.Controllers
             var response = await _searchService.SearchCollections(searchText);
             return Ok(response);
         }
+
+        [HttpGet("/collection/listings/{collectionAddress}")]
+        public async Task<ActionResult<ServiceResponse<List<Listing>>>> CollectionListings(string collectionAddress)
+        {
+            var response = await _searchService.CollectionListings(collectionAddress);
+            return Ok(response);
+        }
+
+        [HttpGet("/collection/{collectionAddress}")]
+        public async Task<ActionResult<ServiceResponse<CollectionFromSearch>>> GetCollection(string collectionAddress)
+        {
+            var response = await _searchService.GetCollection(collectionAddress);
+            return Ok(response);
+        }
     }
 }

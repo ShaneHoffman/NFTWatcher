@@ -45,13 +45,18 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (string.IsNullOrEmpty(searchText)) 
+        if (string.IsNullOrEmpty(searchText))
             return;
 
         var result = await SearchService.SearchCollections(searchText);
 
         if (result is not null && result.Success)
             collections = result.Data!;
+
+        foreach (var c in collections)
+        {
+            Console.WriteLine($"Average price of {c.Name} is {c.stats.average_price}");
+        }
     }
 
     public void GoToCollectionPage(string address)
