@@ -1,5 +1,5 @@
 ﻿@page "/search/{searchText}"
-@inject ISearchService SearchService
+@inject IGenieService SearchService
 @inject NavigationManager NavigationManager
 
 @if (collections is not null && collections.Count > 0)
@@ -38,7 +38,7 @@
 }
 
 @code {
-    private List<CollectionFromSearch> collections = new List<CollectionFromSearch>();
+    private List<Collection> collections = new List<Collection>();
 
     [Parameter]
     public string searchText { get; set; } = string.Empty;
@@ -48,7 +48,7 @@
         if (string.IsNullOrEmpty(searchText))
             return;
 
-        var result = await SearchService.SearchCollections(searchText);
+        var result = await SearchService.GetCollections(searchText);
 
         if (result is not null && result.Success)
             collections = result.Data!;

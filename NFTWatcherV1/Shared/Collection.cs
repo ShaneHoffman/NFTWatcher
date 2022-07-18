@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NFTWatcherV1.Shared
 {
-    public class CollectionFromSearch
+    public class Collection
     {
         public string address { get; set; } = string.Empty;
         public string bannerImageUrl { get; set; } = string.Empty;

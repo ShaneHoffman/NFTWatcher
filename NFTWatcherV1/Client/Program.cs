@@ -13,6 +13,6 @@ builder.Services.AddMudServices();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IGenieService, GenieService>();
 
 await builder.Build().RunAsync();

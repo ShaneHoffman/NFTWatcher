@@ -2,16 +2,16 @@
 
 namespace NFTWatcherV1.Server.Services.SearchService
 {
-    public class SearchService : ISearchService
+    public class GenieService : IGenieService
     {
         private readonly HttpClient _http;
 
-        public SearchService(HttpClient http)
+        public GenieService(HttpClient http)
         {
             _http = http;
         }
 
-        public async Task<ServiceResponse<List<Listing>>> CollectionListings(string collectionAddress)
+        public async Task<ServiceResponse<List<Listing>>> GetCollectionListings(string collectionAddress)
         {
             var response = new ServiceResponse<List<Listing>>();
 
@@ -27,7 +27,7 @@ namespace NFTWatcherV1.Server.Services.SearchService
             try
             {
                 var result = await _http.SendAsync(request);
-                var listingsResult = await result.Content.ReadFromJsonAsync<ListingsResult>();
+                var listingsResult = await result.Content.ReadFromJsonAsync<GenieResult<Listing>>();
 
                 if (listingsResult is not null)
                     response.Data = listingsResult.data;
@@ -47,9 +47,9 @@ namespace NFTWatcherV1.Server.Services.SearchService
             return response;
         }
 
-        public async Task<ServiceResponse<CollectionFromSearch>> GetCollection(string collectionAddress)
+        public async Task<ServiceResponse<Collection>> GetCollection(string collectionAddress)
         {
-            var response = new ServiceResponse<CollectionFromSearch>();
+            var response = new ServiceResponse<Collection>();
 
             var request = new HttpRequestMessage(new HttpMethod("POST"), "https://genie-production-api.herokuapp.com/collections");
             request.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
@@ -62,10 +62,10 @@ namespace NFTWatcherV1.Server.Services.SearchService
             try
             {
                 var result = await _http.SendAsync(request);
-                var searchResult = await result.Content.ReadFromJsonAsync<SearchResult>();
+                var collectionResult = await result.Content.ReadFromJsonAsync<GenieResult<Collection>>();
 
-                if (searchResult is not null)
-                    response.Data = searchResult.data.ElementAt(0);
+                if (collectionResult is not null)
+                    response.Data = collectionResult.data.ElementAt(0);
                 else
                 {
                     response.Success = false;
@@ -82,9 +82,9 @@ namespace NFTWatcherV1.Server.Services.SearchService
             return response;
         }
 
-        public async Task<ServiceResponse<List<CollectionFromSearch>>> SearchCollections(string searchText)
+        public async Task<ServiceResponse<List<Collection>>> GetCollections(string searchText)
         {
-            var response = new ServiceResponse<List<CollectionFromSearch>>();
+            var response = new ServiceResponse<List<Collection>>();
 
             var request = new HttpRequestMessage(new HttpMethod("POST"), "https://genie-production-api.herokuapp.com/searchCollections");
             request.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
@@ -97,10 +97,10 @@ namespace NFTWatcherV1.Server.Services.SearchService
             try
             {
                 var result = await _http.SendAsync(request);
-                var searchResult = await result.Content.ReadFromJsonAsync<SearchResult>();
+                var collectionsResult = await result.Content.ReadFromJsonAsync<GenieResult<Collection>>();
 
-                if (searchResult is not null)
-                    response.Data = searchResult.data;
+                if (collectionsResult is not null)
+                    response.Data = collectionsResult.data;
                 else
                 {
                     response.Success = false;

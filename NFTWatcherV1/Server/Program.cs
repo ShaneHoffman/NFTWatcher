@@ -14,7 +14,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IGenieService, GenieService>();
 
 var app = builder.Build();
 

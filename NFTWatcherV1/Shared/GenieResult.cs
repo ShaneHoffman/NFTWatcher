@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NFTWatcherV1.Shared
 {
-    public class SearchResult
+    public class GenieResult<T>
     {
         public int code { get; set; }
-        public List<CollectionFromSearch> data { get; set; } = new List<CollectionFromSearch>();
+        public List<T> data { get; set; } = new List<T>();
     }
 }
