@@ -1,10 +1,94 @@
 ﻿@page "/collection/{collectionAddress}"
+@inject IGenieService GenieService
 
-<h3>@collectionAddress</h3>
+<MudPaper Class="mt-4 mx-n16 mx-n16 relative">
+    <MudCard>
+        <MudCardMedia Style="background-size: cover" Image="@collection.bannerImageUrl"></MudCardMedia>
+    </MudCard>
+</MudPaper>
+<MudCard Square="true" Class="mt-n8" Elevation="0">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Class="z-10" Style="zoom: 3;" Image="@collection.imageUrl" />
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudPaper Class="d-flex flex-column" Elevation="0">
+                <MudPaper Class="d-flex flex-row" Elevation="0">
+                    <MudText Typo="Typo.h5"
+                             Color="Color.Default">
+                        @collection.Name
+                    </MudText>
+                    @if (collection.isVerified)
+                    {
+                        <MudIcon Class="pl-1 pb-1"
+                                 Icon="@Icons.Material.Filled.Verified"
+                                 Color="Color.Info"
+                                 Style="zoom: 1.5" />
+                    }
+                </MudPaper>
+                <MudPaper Class="d-flex flex-row" Elevation="0">
+                    <MudText Typo="Typo.body2">
+                        @($"Supply: {(decimal)collection.totalSupply / 1000}K")
+                    </MudText>
+                    <MudText Class="ml-3"
+                             Typo="Typo.body2">
+                        @(collection.floorPrice is null ? "Floor Price: ???" : $"Floor Price: {Math.Round(collection.floorPrice.Value, 3)} ETH")
+                    </MudText>
+                    <MudText Class="ml-3"
+                             Typo="Typo.body2">
+                        @($"Daily Volume: {collection.stats.one_day_volume} ETH")
+                    </MudText>
+                </MudPaper>
+            </MudPaper>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudGrid>
+        @foreach (var listing in collectionListings)
+        {
+            <MudItem xs="4">
+                <MudCard Class="pa-4" Elevation="4">
+                    <MudCardMedia Class="mb-2 rounded-lg" Image="@listing.imageUrl"></MudCardMedia>
+                    <MudLink Class="d-inline"
+                             Href="@listing.url">@(listing.name is null ? $"#{listing.tokenId}" : listing.name)</MudLink>
+                    @if (listing.openseaSusFlag is not null && listing.openseaSusFlag.Value)
+                    {
+                        <MudIcon Class="d-inline pl-1 mb-1"
+                                 Icon="@Icons.Material.Filled.Error"
+                                 Color="Color.Warning" />
+                    }
+                    <MudText>
+                        @((Decimal.Parse(listing.basePrice.Substring(0, listing.basePrice.Length-15)) / 1000).ToString())
+                        @listing.baseCurrency
+                    </MudText>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudCard>
 
 @code {
+    private Collection collection = new Collection();
+    private List<Listing> collectionListings = new List<Listing>();
+
     [Parameter]
     public string collectionAddress { get; set; } = string.Empty;
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrEmpty(collectionAddress))
+            return;
+
+        var collectionResult = await GenieService.GetCollection(collectionAddress);
+
+        if (collectionResult is not null && collectionResult.Success)
+        {
+            collection = collectionResult.Data!;
+
+            var listingsResult = await GenieService.GetCollectionListings(collectionAddress);
+
+            if (listingsResult is not null && listingsResult.Success)
+                collectionListings = listingsResult.Data!;
+        }
+    }
 }
 

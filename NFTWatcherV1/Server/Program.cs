@@ -1,5 +1,5 @@
 global using NFTWatcherV1.Shared;
-global using NFTWatcherV1.Server.Services.SearchService;
+global using NFTWatcherV1.Server.Services.GenieService;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);

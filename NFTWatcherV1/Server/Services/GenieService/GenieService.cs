@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 
-namespace NFTWatcherV1.Server.Services.SearchService
+namespace NFTWatcherV1.Server.Services.GenieService
 {
     public class GenieService : IGenieService
     {
@@ -21,7 +21,7 @@ namespace NFTWatcherV1.Server.Services.SearchService
             request.Content = new StringContent("{\"filters\":{\"address\":\"" + collectionAddress +
                 "\",\"traits\":{},\"searchText\":\"\",\"notForSale\":false,\"numTraits\":[]},\"fields\":" +
                 "{\"address\":1,\"name\":1,\"id\":1,\"imageUrl\":1,\"currentPrice\":1,\"currentUsdPrice\":1,\"" +
-                "paymentToken\":1,\"animationUrl\":1,\"notForSale\":1,\"rarity\":1,\"tokenId\":1},\"limit\":25,\"offset\":0,\"markets\":[]}");
+                "paymentToken\":1,\"animationUrl\":1,\"notForSale\":1,\"rarity\":1,\"tokenId\":1},\"limit\":24,\"offset\":0,\"markets\":[]}");
             request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
             try

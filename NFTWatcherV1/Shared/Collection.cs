@@ -16,5 +16,6 @@ namespace NFTWatcherV1.Shared
         public string Name { get; set; } = string.Empty;
         public CollectionStatistics stats { get; set; } = new CollectionStatistics();
         public int totalSupply { get; set; }
+        public List<Trait> traits { get; set; } = new List<Trait>();
     }
 }

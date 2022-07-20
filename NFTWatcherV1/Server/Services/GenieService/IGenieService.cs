@@ -1,4 +1,4 @@
-﻿namespace NFTWatcherV1.Server.Services.SearchService
+﻿namespace NFTWatcherV1.Server.Services.GenieService
 {
     public interface IGenieService
     {

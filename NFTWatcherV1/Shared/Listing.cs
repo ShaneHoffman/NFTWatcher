@@ -8,7 +8,7 @@ namespace NFTWatcherV1.Shared
         public string imageUrl { get; set; } = string.Empty;
         public string marketplace { get; set; } = string.Empty;
         public string name { get; set; } = string.Empty;
-        public bool openseaSusFlag { get; set; } = false;
+        public bool? openseaSusFlag { get; set; } = false;
         public string tokenId { get; set; } = string.Empty;
         public string url { get; set; } = string.Empty;
     }
