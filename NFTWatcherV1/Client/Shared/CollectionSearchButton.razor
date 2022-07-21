@@ -1,0 +1,77 @@
+﻿@inject IGenieService GenieService
+
+<MudPaper Class="d-flex flex-row" Elevation="0">
+    @if (collection.traits.Count > 0)
+    {
+        <MudSelect Class="mr-2"
+                   @bind-Value="traitType"
+                   Label="Trait Type">
+            @foreach (var traitType in collection.traits.Select(t => t.trait_type).Distinct())
+            {
+                <MudSelectItem Value="@traitType">@traitType</MudSelectItem>
+            }
+        </MudSelect>
+    }
+    @if (!string.IsNullOrEmpty(traitType))
+    {
+        <MudSelect Class="mr-2"
+                   @bind-Value="trait"
+                   Label="Trait">
+            @foreach (var trait in collection.traits.Where(t => t.trait_type.Equals(traitType)))
+            {
+                <MudSelectItem Value="@trait.trait_value.ToString()">@trait.trait_value.ToString()</MudSelectItem>
+            }
+        </MudSelect>
+    }
+    <MudIconButton Class="mt-2"
+                   Icon="@Icons.Material.Filled.MoreVert"
+                   Color="Color.Success"
+                   OnClick="(() => Toggle(collection.address))" />
+    <MudPopover Open="isOpen"
+                AnchorOrigin="Origin.BottomRight"
+                TransformOrigin="Origin.TopRight">
+        <div class="d-flex flex-column pa-1">
+            <MudButton @onclick="(() => RevealTraits(collection.address))">Reveal Traits</MudButton>
+            <MudButton @onclick="(() => AddToWatcher(collection))">Add to Watcher</MudButton>
+        </div>
+    </MudPopover>
+</MudPaper>
+
+@code {
+    private bool isOpen = false;
+
+    private string traitType = string.Empty;
+    private string trait = string.Empty;
+
+    [Parameter]
+    public Collection collection { get; set; } = new Collection();
+
+    public void Toggle(string address)
+    {
+        isOpen = !isOpen;
+    }
+
+    public async Task RevealTraits(string address)
+    {
+        isOpen = false;
+
+        var result = await GenieService.GetCollection(address);
+
+        if (result is not null && result.Success)
+        {
+            traitType = string.Empty;
+            trait = string.Empty;
+            collection.traits = result.Data!.traits;
+        }
+    }
+
+    public void AddToWatcher(Collection collection)
+    {
+        isOpen = false;
+
+        Console.WriteLine(collection.Name);
+
+        Console.WriteLine($"Focusing on trait: {trait} {(string)traitType}");
+    }
+}
+
