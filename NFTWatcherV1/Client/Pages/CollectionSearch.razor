@@ -29,46 +29,7 @@
                             @(collection.floorPrice is null ? "Floor Unavailable" : $"{Math.Round(collection.floorPrice.Value, 3)} ETH")</MudText>
                     </CardHeaderContent>
                     <CardHeaderActions>
-                        <MudPaper Class="d-flex flex-row" Elevation="0">
-                            @if (activeAddress.Equals(collection.address) && collection.traits.Count > 0)
-                            {
-                                <MudSelect Class="mr-2"
-                                           @bind-Value="traitType"
-                                           Label="Trait Type">
-                                    @foreach (var traitType in collection.traits.Select(t => t.trait_type).Distinct())
-                                    {
-                                        <MudSelectItem Value="@traitType">@traitType</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            }
-                            @if (activeAddress.Equals(collection.address) && !string.IsNullOrEmpty(traitType))
-                            {
-                                <MudSelect Class="mr-2"
-                                           @bind-Value="trait"
-                                           Label="Trait">
-                                    @foreach (var trait in collection.traits.Where(t => t.trait_type.Equals(traitType)))
-                                    {
-                                        <MudSelectItem Value="@trait.trait_value">@trait.trait_value</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            }
-                            <MudIconButton Class="mt-2"
-                                           Icon="@Icons.Material.Filled.MoreVert"
-                                           Color="Color.Success"
-                                           OnClick="(() => Toggle(collection.address))" />
-                            @if (popActiveAddress.Equals(collection.address))
-                            {
-                                <MudPopover Open="isOpen"
-                                            AnchorOrigin="Origin.BottomRight"
-                                            TransformOrigin="Origin.TopRight">
-                                    <div class="d-flex flex-column pa-1">
-                                        <MudButton @onclick="(() => RevealTraits(collection.address))">Reveal Traits</MudButton>
-                                        <MudButton @onclick="(() => AddToWatcher(collection))">Add to Watcher</MudButton>
-                                    </div>
-                                </MudPopover>
-                            }
-
-                        </MudPaper>
+                        <CollectionSearchButton collection="@collection" />
                     </CardHeaderActions>
                 </MudCardHeader>
             </MudCard>
@@ -78,13 +39,6 @@
 
 @code {
     private List<Collection> collections = new List<Collection>();
-
-    private string popActiveAddress = string.Empty;
-    private bool isOpen = false;
-
-    private string activeAddress = string.Empty;
-    private string traitType = string.Empty;
-    private string trait = string.Empty;
 
     [Parameter]
     public string searchText { get; set; } = string.Empty;
@@ -103,46 +57,5 @@
     public void GoToCollectionPage(string address)
     {
         NavigationManager.NavigateTo($"/collection/{address}");
-    }
-
-    public void Toggle(string address)
-    {
-        popActiveAddress = address;
-        isOpen = !isOpen;
-    }
-
-    public async Task RevealTraits(string address)
-    {
-        isOpen = false;
-
-        var collection = collections.FirstOrDefault(c => c.address.Equals(address));
-
-        if(collection is not null && collection.traits.Count > 0)
-        {
-            activeAddress = address;
-            traitType = string.Empty;
-            trait = string.Empty;
-            return;
-        }
-
-        var result = await GenieService.GetCollection(address);
-
-        if(result is not null && result.Success && collection is not null)
-        {
-            activeAddress = address;
-            traitType = string.Empty;
-            trait = string.Empty;
-            collection.traits = result.Data!.traits;
-        }
-    }
-
-    public void AddToWatcher(Collection collection)
-    {
-        isOpen = false;
-
-        Console.WriteLine(collection.Name);
-
-        if (activeAddress.Equals(collection.address))
-            Console.WriteLine($"Focusing on trait: {trait} {traitType}");
     }
 }

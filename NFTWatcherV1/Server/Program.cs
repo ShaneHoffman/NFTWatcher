@@ -1,5 +1,6 @@
 global using NFTWatcherV1.Shared;
 global using NFTWatcherV1.Server.Services.GenieService;
+global using NFTWatcherV1.Server.Services.WatchService;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IGenieService, GenieService>();
+builder.Services.AddScoped<IWatchService, WatchService>();
 
 var app = builder.Build();
 
